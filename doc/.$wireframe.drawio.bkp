@@ -1,0 +1,91 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.2 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="25.0.2">
+  <diagram name="Page-1" id="-GbBILsatDR1qsLduiEq">
+    <mxGraphModel dx="801" dy="1293" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-2" value="Movies&amp;nbsp;&lt;span style=&quot;text-align: left;&quot;&gt;✅&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C7C7C7;" vertex="1" parent="1">
+          <mxGeometry x="190" y="80" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-3" value="Apps&amp;nbsp;&lt;span style=&quot;text-align: left;&quot;&gt;✅&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="80" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-4" value="&lt;font style=&quot;font-size: 60px;&quot;&gt;+&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="720" y="60" width="60" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-5" value="Manga&amp;nbsp;&lt;span style=&quot;text-align: left;&quot;&gt;❌&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="80" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-6" value="File view" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D9D9D9;" vertex="1" parent="1">
+          <mxGeometry x="190" y="20" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-7" value="Archive view" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="40" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-8" value="✅&amp;nbsp;Fantastic four Silver surfer 2007" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="140" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-10" value="Every entry is a file - entry must have corresponding file in order to exist - if file is deleted, alert on the left of the file name" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="-110" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-11" value="Files do not have to be indexed, if they are not, they won&#39;t have any metadata stored about them" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="-110" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-12" value="User can filter by main categories, then by subcategories. Main category must have subcategories turned on in their settings" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="-210" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-13" value="Main categories and subcategories can be added similarly to files - they will correspond to folders in the file system" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="-210" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-14" value="❌ Star wars episode 2" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="170" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-15" value="File view" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="20" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-16" value="Archive view" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EBEBEB;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="40" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-18" value="Movies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C7C7C7;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="80" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-19" value="Apps" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="80" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-21" value="✅&amp;nbsp;Fantastic four Silver surfer 2007" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="140" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-23" value="&lt;font style=&quot;font-size: 60px;&quot;&gt;+&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1630" y="60" width="60" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="7X0cWHdbuOjzXKztfqmV-29" target="7X0cWHdbuOjzXKztfqmV-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="105" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-28" value="Others&amp;nbsp;〰️" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="80" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-29" value="Folders" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="87.5" width="110" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7X0cWHdbuOjzXKztfqmV-30" target="7X0cWHdbuOjzXKztfqmV-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-30" value="Categories" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="87.5" width="110" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="7X0cWHdbuOjzXKztfqmV-32" target="7X0cWHdbuOjzXKztfqmV-28">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="690" y="23" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7X0cWHdbuOjzXKztfqmV-32" value="Ignored folder" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="5" width="110" height="35" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
