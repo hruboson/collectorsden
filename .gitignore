@@ -30,4 +30,10 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# Project specific paths and file extensions
 *.log
+
+# Generated docs
+doc/generated.md
+doc/generated.tmp
