@@ -6,8 +6,6 @@ import (
 	"syscall"
 
 	"github.com/karrick/godirwalk"
-
-	_ "hrubos.dev/collectorsden/internal/logger"
 )
 
 type Indexer struct {
