@@ -53,3 +53,28 @@ func Log(msg string, category string){
 		log.Println(msg)
 	}
 }
+
+func Fatal(err error, category ...string){
+	if err == nil {
+		return
+	}
+
+	// Determine category
+	cat := ""
+	if len(category) > 0 {
+		cat = category[0]
+	}
+
+	// Log the error
+	if cat != "" {
+		log.Println("[FATAL][" + cat + "] " + err.Error())
+	} else {
+		log.Println("[FATAL] " + err.Error())
+	}
+
+	// Flush & close file
+	Close()
+
+	// Exit program
+	os.Exit(1)
+}

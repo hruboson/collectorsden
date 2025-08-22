@@ -1,34 +1,93 @@
 package indexer
 
 import (
-	"fmt"
 	"path/filepath"
 	"strings"
 	"syscall"
 
 	"github.com/karrick/godirwalk"
-	"hrubos.dev/collectorsden/internal/logger"
+
+	_ "hrubos.dev/collectorsden/internal/logger"
 )
 
-func TreeDir(directory string, maxDepth int) error {
+type Indexer struct {
+	MaxDepth int
+	IndexHiddenFiles bool
+
+	FileStructure FileStructure
+}
+
+func NewIndexer() *Indexer {
+	return &Indexer{
+		MaxDepth:    		3,
+		IndexHiddenFiles: 	false,
+	}
+}
+
+type FileStructure struct {
+	Nodes []Node
+	LastUpdated int
+}
+
+func (fs *FileStructure) Print(indent string) {
+	for _, node := range fs.Nodes { // iterate all top-level nodes
+		printNode(node, indent)
+	}
+}
+
+func (i *Indexer) TreeDir(directory string) error {
 	baseDepth := len(strings.Split(filepath.Clean(directory), string(filepath.Separator)))
+
+	root := &Folder{
+		Foldername: filepath.Base(directory),
+		Nodes: []Node{},
+	}
+
+	folders := map[string]*Folder{
+		directory: root,
+	}
 
 	err := godirwalk.Walk(directory, &godirwalk.Options{
 		Callback: func(osPathname string, de *godirwalk.Dirent) error {
 			if de.IsDir() {
 				currentDepth := len(strings.Split(filepath.Clean(osPathname), string(filepath.Separator)))
 				hiddenFolder, err := isHidden(osPathname)
-				if err != nil || (currentDepth - baseDepth > maxDepth || hiddenFolder) {
+				if err != nil || (currentDepth - baseDepth > i.MaxDepth || hiddenFolder) {
 					return godirwalk.SkipThis
 				}
 			}
 
-			entry := fmt.Sprintf("%s %s", de.ModeType(), osPathname)
-			logger.Log(entry, logger.CatIndexer)
+			parentPath := filepath.Dir(osPathname)
+			parentFolder, ok := folders[parentPath]
+			if !ok {
+				// should not happen unless walking strange symlinks
+				return nil
+			}
+
+			if de.IsDir() {
+				folder := &Folder{
+					Foldername: de.Name(),
+					Nodes:    []Node{},
+				}
+				folder.SetParent(parentFolder)
+
+				parentFolder.Nodes = append(parentFolder.Nodes, folder)
+				folders[osPathname] = folder // add to map for children
+			} else {
+				file := &File{
+					Filename: de.Name(),
+					Filetype: filepath.Ext(de.Name()),
+				}
+				file.SetParent(parentFolder)
+
+				parentFolder.Nodes = append(parentFolder.Nodes, file)
+			}
+
 			return nil
 		},
 	})
 	
+	i.FileStructure.Nodes = root.Nodes
 	return err
 }
 
