@@ -3,41 +3,90 @@ package ui
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	_ "fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 
-	logger "hrubos.dev/collectorsden/internal/logger"
 	indexer "hrubos.dev/collectorsden/internal/indexer"
+	logger "hrubos.dev/collectorsden/internal/logger"
 )
+
+var INITIAL_WINDOW_WIDTH float32 = 1200
+var INITIAL_WINDOW_HEIGHT float32 = 600
+var WINDOW_WIDTH float32 = INITIAL_WINDOW_WIDTH
+var WINDOW_HEIGHT float32 = INITIAL_WINDOW_HEIGHT
 
 func Run(){
 	logger.Log("Starting UI", logger.CatUI)
 
-	mainApp := app.New()
-	mainWindow := mainApp.NewWindow("tree")
+	app := app.NewWithID("hrubos.dev/collectorsden")
+	app.Settings().SetTheme(&darkTheme{})
+	mainWindow := app.NewWindow("tree")
 
-	root := "E:\\Archive"
+	rootDirEntryWidget := newRootDirEntry()
 
-	lb := widget.NewLabel("")
+	tree := newFileTree()
+	topBar := newTopBar(rootDirEntryWidget, tree, mainWindow)
+	statusLabel := widget.NewLabel("")
 
-	dirEntry := widget.NewEntry()
-	dirEntry.Text = root
+	content := container.NewBorder(topBar, statusLabel, nil, nil, tree)
 
-	tree := widget.NewTree(nil, nil, nil, nil)
-	tree.Root = root
-	refreshTree(tree, dirEntry.Text)
-
-	tree.OnSelected = func(uid widget.TreeNodeID) {
-		lb.SetText(uid)
-	}
-
-	mainWindow.SetContent(tree)
-	mainWindow.Resize(fyne.NewSize(550, 450))
+	mainWindow.SetContent(content)
+	mainWindow.Resize(fyne.NewSize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT))
 	mainWindow.ShowAndRun()
 
 	logger.Log("Closing UI", logger.CatUI)
 }
 
+
+// --------------------- Components ---------------------
+
+func newRootDirEntry() *widget.Entry {
+	entry := widget.NewEntry()
+	entry.SetPlaceHolder("Enter directory path...")
+	return entry
+}
+
+func newFileTree() *widget.Tree {
+	tree := widget.NewTree(nil, nil, nil, nil)
+	return tree
+}
+
+func newTopBar(entry *widget.Entry, tree *widget.Tree, window fyne.Window) *fyne.Container {
+	browseBtn := widget.NewButton("Browse", func() {
+		callback := func(uri fyne.ListableURI, err error) {
+			if uri != nil {
+				entry.SetText(uri.Path())
+				refreshTreeFromEntry(tree, entry)
+			}
+		}
+
+		size := window.Canvas().Size()
+		width := size.Width
+		height := size.Height
+		dialogWidth := width * 0.66
+		dialogHeight := height * 0.66 
+
+		folderDialog := dialog.NewFolderOpen(callback, window)  
+		folderDialog.Resize(fyne.NewSize(dialogWidth, dialogHeight))
+		folderDialog.Show()
+	})
+
+	entry.OnSubmitted = func(_ string) {
+		refreshTreeFromEntry(tree, entry)
+	}
+
+	return container.NewBorder(nil, nil, nil, browseBtn, entry)
+}
+
+// --------------------- Logic ---------------------
+
+func refreshTreeFromEntry(tree *widget.Tree, entry *widget.Entry) {
+	root := entry.Text
+	tree.Root = root
+	refreshTree(tree, root)
+}
 
 func refreshTree(tree *widget.Tree, root string) {
 	tree.Root = root
@@ -53,71 +102,37 @@ func refreshTree(tree *widget.Tree, root string) {
 
 	// Create new Node (Node is Label component)
 	tree.CreateNode = func(branch bool) (o fyne.CanvasObject) {
-		return widget.NewLabel("")
+		if !branch{
+			return container.NewHBox(
+				widget.NewIcon(theme.FileIcon()),
+				widget.NewLabel(""),
+			)
+		}else{
+			return container.NewHBox(
+				widget.NewLabel(""),
+			)
+		}
 	}
 
 	// Set name for each node
 	tree.UpdateNode = func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
-		l := node.(*widget.Label)
-		l.SetText(indexer.GetFileName(uid))
+		hbox := node.(*fyne.Container)
+		if !branch {
+			icon := hbox.Objects[0].(*widget.Icon)
+			label := hbox.Objects[1].(*widget.Label)
+
+			label.SetText(indexer.GetFileName(uid))
+			icon.SetResource(theme.FileIcon())
+		} else {
+			label := hbox.Objects[0].(*widget.Label)
+			label.SetText(indexer.GetFileName(uid))
+		}
 	}
 
 	// If node is dir make branch
 	tree.IsBranch = func(uid widget.TreeNodeID) (ok bool) {
 		return indexer.IsDir(uid)
 	}
-	
+
 	tree.Refresh()
 }
-
-// Recursive helper to render FileStructure as text
-func renderFileStructure(fs *indexer.FileStructure, indent string) string {
-	result := ""
-	for _, node := range fs.Nodes {
-		result += renderNode(node, indent)
-	}
-	return result
-}
-
-func renderNode(node indexer.Node, indent string) string {
-	switch n := node.(type) {
-	case *indexer.Folder:
-		str := indent + "+ Folder: " + n.GetFoldername() + "\n"
-		for _, child := range n.Nodes {
-			str += renderNode(child, indent+"  ")
-		}
-		return str
-	case *indexer.File:
-		return indent + "- File: " + n.GetFiletype() + " " + n.Filename + "\n"
-	default:
-		return indent + "? Unknown node type\n"
-	}
-}
-
-
-// LOADING VERSION IN Ui.Run()
-/*a := app.New()
-w := a.NewWindow("File Structure")
-
-/*loadingLabel := widget.NewLabel("Indexing files, please wait...")
-scroll := container.NewScroll(loadingLabel)
-w.SetContent(scroll)
-w.Resize(fyne.NewSize(600, 400))
-
-indx := indexer.NewIndexer()
-
-go func() {
-	err := indx.TreeDir("G:\\Projects")
-	if err != nil {
-		logger.Fatal(err)
-	}
-
-	// Prepare the textual tree
-	text := renderFileStructure(&indx.FileStructure, "")
-
-	fyne.Do(func(){
-		// Update UI on the main thread
-		w.Canvas().Refresh(scroll) // optional
-		w.SetContent(container.NewScroll(widget.NewLabel(text)))
-	})
-}()*/

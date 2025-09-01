@@ -119,7 +119,7 @@ func GetFiles(path string) (list []string) {
 	fi, err := os.ReadDir(path)
 	if err != nil {
 		msg := fmt.Sprintf("Error while geting file from %s", path)
-		logger.Log(logger.CatIndexer, msg)
+		logger.Log(msg, logger.CatIndexer)
 		return
 	}
 
@@ -137,13 +137,13 @@ func isHidden(path string) bool {
     p, err := syscall.UTF16PtrFromString(path)
     if err != nil {
 		msg := fmt.Sprintf("Invalid path string '%s': contains NUL characters", path)
-		logger.Log(logger.CatIndexer, msg)
+		logger.Log(msg, logger.CatIndexer)
         return false
     }
     attrs, err := syscall.GetFileAttributes(p)
     if err != nil {
 		msg := fmt.Sprintf("Failed to get file attributes for '%s': %v (while determining if the file is hidden)", path, err)
-		logger.Log(logger.CatIndexer, msg)
+		logger.Log(msg, logger.CatIndexer)
         return false
     }
     const FILE_ATTRIBUTE_HIDDEN = 0x2
