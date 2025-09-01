@@ -1,11 +1,15 @@
 package indexer
 
 import (
+	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"syscall"
 
 	"github.com/karrick/godirwalk"
+
+	logger "hrubos.dev/collectorsden/internal/logger"
 )
 
 type Indexer struct {
@@ -33,6 +37,7 @@ func (fs *FileStructure) Print(indent string) {
 	}
 }
 
+// Populates the FileStructure in Indexer struct
 func (i *Indexer) TreeDir(directory string) error {
 	baseDepth := len(strings.Split(filepath.Clean(directory), string(filepath.Separator)))
 
@@ -49,8 +54,8 @@ func (i *Indexer) TreeDir(directory string) error {
 		Callback: func(osPathname string, de *godirwalk.Dirent) error {
 			if de.IsDir() {
 				currentDepth := len(strings.Split(filepath.Clean(osPathname), string(filepath.Separator)))
-				hiddenFolder, err := isHidden(osPathname)
-				if err != nil || (currentDepth - baseDepth > i.MaxDepth || hiddenFolder) {
+				hiddenFolder := isHidden(osPathname)
+				if currentDepth - baseDepth > i.MaxDepth || hiddenFolder {
 					return godirwalk.SkipThis
 				}
 			}
@@ -89,15 +94,58 @@ func (i *Indexer) TreeDir(directory string) error {
 	return err
 }
 
-func isHidden(path string) (bool, error) {
+/**********************
+* PRIMITIVE FUNCTIONS *
+**********************/
+
+// return files from path
+func GetFileName(path string) string {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return ""
+	}
+	return fi.Name()
+}
+
+func IsDir(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return fi.IsDir()
+}
+
+func GetFiles(path string) (list []string) {
+	fi, err := os.ReadDir(path)
+	if err != nil {
+		msg := fmt.Sprintf("Error while geting file from %s", path)
+		logger.Log(logger.CatIndexer, msg)
+		return
+	}
+
+	for _, file := range fi {
+		filename := path + string(filepath.Separator) + file.Name()
+		if(isHidden(filename)){
+			continue
+		}
+		list = append(list, filename)
+	}
+	return
+}
+
+func isHidden(path string) bool {
     p, err := syscall.UTF16PtrFromString(path)
     if err != nil {
-        return false, err
+		msg := fmt.Sprintf("Invalid path string '%s': contains NUL characters", path)
+		logger.Log(logger.CatIndexer, msg)
+        return false
     }
     attrs, err := syscall.GetFileAttributes(p)
     if err != nil {
-        return false, err
+		msg := fmt.Sprintf("Failed to get file attributes for '%s': %v (while determining if the file is hidden)", path, err)
+		logger.Log(logger.CatIndexer, msg)
+        return false
     }
     const FILE_ATTRIBUTE_HIDDEN = 0x2
-    return attrs&FILE_ATTRIBUTE_HIDDEN != 0, nil
+    return attrs&FILE_ATTRIBUTE_HIDDEN != 0
 }
