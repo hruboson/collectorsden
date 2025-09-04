@@ -6,6 +6,7 @@ import (
 
 	logger "hrubos.dev/collectorsden/internal/logger"
 
+	themes "hrubos.dev/collectorsden/internal/ui/themes"
 	uiFiles "hrubos.dev/collectorsden/internal/ui/uiFiles"
 )
 
@@ -16,12 +17,12 @@ func Run(){
 	logger.Log("Starting UI", logger.CatUI)
 
 	app := app.NewWithID("hrubos.dev/collectorsden")
-	app.Settings().SetTheme(&darkTheme{})
+	app.Settings().SetTheme(themes.NewDarkTheme())
 	mainWindow := app.NewWindow("tree")
 
 	fileModel := uiFiles.NewModel()
 	fileView := uiFiles.NewView()
-	fileController := uiFiles.NewController(fileModel, fileView, mainWindow)
+	fileController := uiFiles.NewController(fileModel, fileView, app, mainWindow)
 
 	mainWindow.SetContent(fileController.View)
 	mainWindow.Resize(fyne.NewSize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT))

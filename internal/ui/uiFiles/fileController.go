@@ -2,24 +2,31 @@ package uiFiles
 
 import (
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
+
+	logger "hrubos.dev/collectorsden/internal/logger"
+	themes "hrubos.dev/collectorsden/internal/ui/themes"
 )
 
 type Controller struct {
 	*Model
 	*View
 	window fyne.Window
+	app fyne.App
 }
 
-func NewController(fm *Model, fv *View, window fyne.Window) *Controller {
+func NewController(fm *Model, fv *View, app fyne.App, window fyne.Window) *Controller {
 	fc := &Controller{
 		Model: fm,
 		View: fv,
 		window: window,
+		app: app,
 	}
 
 	fc.View.SetBrowseButtonOnTapped(fc.browseFiles)
+	fc.View.SetSettingsButtonOnTapped(fc.openSettingsWindow)
 	fc.View.SetTreeWidgetOnSelected(func(uid widget.TreeNodeID) {
 		fc.View.StatusLabelSetText(uid)
 	})
@@ -55,4 +62,31 @@ func (fc *Controller) browseFiles(){
 func (fc *Controller) bindFileTree() {
 	childUIDs, isBranch, getName := fc.Model.TreeData()
 	fc.View.BindTree(childUIDs, isBranch, getName)
+}
+
+func (fc *Controller) openSettingsWindow() {
+	//TODO put this into components or create new mvc
+    settingsWindow := fyne.CurrentApp().NewWindow("Settings")
+
+	themeToggle := widget.NewCheck("Dark Theme", func(enabled bool) {
+		if enabled {
+			fc.app.Settings().SetTheme(themes.NewDarkTheme())  // your custom dark theme
+		} else {
+			fc.app.Settings().SetTheme(themes.NewLightTheme())
+		}
+	})
+
+	themeToggle.SetChecked(true)
+
+   	c := container.NewVBox(
+		widget.NewLabel("Select theme:"),
+		themeToggle,
+	)
+
+	settingsWindow.SetContent(c)
+    settingsWindow.Resize(fyne.NewSize(400, 300))
+	settingsWindow.CenterOnScreen()
+
+	logger.Log("Opening settings window", logger.CatUI)
+    settingsWindow.Show()
 }

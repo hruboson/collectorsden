@@ -17,6 +17,7 @@ type View struct {
 	treeWidget *widget.Tree
 	rootDirEntryWidget *widget.Entry
 	browserBtnWidget *widget.Button
+	settingsBtnWidget *widget.Button
 	statusLabel *widget.Label
 }
 
@@ -25,6 +26,7 @@ func NewView() *View {
 		treeWidget: widget.NewTree(nil, nil, nil, nil),
 		rootDirEntryWidget: widget.NewEntry(),
 		browserBtnWidget: widget.NewButton("Browse", nil),
+		settingsBtnWidget: widget.NewButton("Settings", nil),
 		statusLabel: widget.NewLabel(""),
 	}
 
@@ -36,7 +38,7 @@ func NewView() *View {
 			nil,
 			nil,
 			nil,
-			fv.browserBtnWidget,
+	        container.NewHBox(fv.browserBtnWidget, fv.settingsBtnWidget),
 			fv.rootDirEntryWidget,
 		),
 		fv.statusLabel,
@@ -44,6 +46,7 @@ func NewView() *View {
 		nil,
 		fv.treeWidget,
 	)
+
     fv.ExtendBaseWidget(fv) // Important so Fyne knows it's a widget
 
 	return fv
@@ -100,6 +103,10 @@ func (fv *View) SwitchTreeRoot(root string){
 
 func (fv *View) SetBrowseButtonOnTapped(f func()) {
 	fv.browserBtnWidget.OnTapped = f	
+}
+
+func (fv *View) SetSettingsButtonOnTapped(f func()) {
+	fv.settingsBtnWidget.OnTapped = f
 }
 
 func (fv *View) SetTreeWidgetOnSelected(f func(uid widget.TreeNodeID)) {
