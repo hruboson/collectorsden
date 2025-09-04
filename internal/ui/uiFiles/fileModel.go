@@ -7,11 +7,14 @@ import (
 
 type FileModel struct {
 	root string
+
+	childrenCache map[string][]string // reason: keeps the tree queries inexpensive (drive cost)
 }
 
 func NewFileModel() *FileModel {
 	fm := &FileModel{
 		root: "./",
+        childrenCache: make(map[string][]string),
 	}
 
 	return fm
@@ -25,9 +28,15 @@ func (fm *FileModel) TreeData() (
 ) {
 	childUIDs = func(uid string) []string {
 		if uid == "" {
-			return indexer.GetFiles(fm.root)
+			uid = fm.root
 		}
-		return indexer.GetFiles(uid)
+		if cached, ok := fm.childrenCache[uid]; ok {
+			return cached
+		}
+
+		files := indexer.GetFiles(uid)
+		fm.childrenCache[uid] = files
+		return files
 	}
 
 	isBranch = func(uid string) bool {
