@@ -1,4 +1,4 @@
-package views
+package uiFiles
 
 import (
 	"fyne.io/fyne/v2"

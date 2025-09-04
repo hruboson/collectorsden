@@ -1,7 +1,8 @@
-package models
+package uiFiles
 
 import (
 	indexer "hrubos.dev/collectorsden/internal/indexer"
+	logger "hrubos.dev/collectorsden/internal/logger"
 )
 
 type FileModel struct {
@@ -42,6 +43,7 @@ func (fm *FileModel) TreeData() (
 
 // ----- Data setters -----
 func (fm *FileModel) SetRoot(root string) {
+	logger.Log("Tree root is now " + root, logger.CatModel)
 	fm.root = root
 }
 

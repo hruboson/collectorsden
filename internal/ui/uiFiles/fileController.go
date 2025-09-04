@@ -1,22 +1,20 @@
-package controllers
+package uiFiles
 
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 
-	"hrubos.dev/collectorsden/internal/ui/models"
-	"hrubos.dev/collectorsden/internal/ui/views"
 	"hrubos.dev/collectorsden/internal/logger"
 )
 
 type FileController struct {
-	*models.FileModel
-	*views.FileView
+	*FileModel
+	*FileView
 	window fyne.Window
 }
 
-func NewFileController(fm *models.FileModel, fv *views.FileView, window fyne.Window) *FileController {
+func NewFileController(fm *FileModel, fv *FileView, window fyne.Window) *FileController {
 	fc := &FileController{
 		FileModel: fm,
 		FileView: fv,
@@ -57,7 +55,6 @@ func (fc *FileController) browseFiles(){
 }
 
 func (fc *FileController) bindFileTree() {
-	logger.Log("Updating file tree data", logger.CatController)
 	childUIDs, isBranch, getName := fc.FileModel.TreeData()
 	fc.FileView.BindTree(childUIDs, isBranch, getName)
 }
