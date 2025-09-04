@@ -38,7 +38,6 @@ func (fs *FileStructure) Print(indent string) {
 * PRIMITIVE FUNCTIONS *
 **********************/
 
-// return files from path
 func GetFileName(path string) string {
 	fi, err := os.Stat(path)
 	if err != nil {
@@ -70,6 +69,8 @@ func GetFiles(path string) (list []string) {
 		}
 		list = append(list, filename)
 	}
+
+	logger.Log("Retrieving files from " + path, logger.CatIndexer)
 	return
 }
 
