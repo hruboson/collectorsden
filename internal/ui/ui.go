@@ -7,6 +7,7 @@ import (
 	logger "hrubos.dev/collectorsden/internal/logger"
 
 	themes "hrubos.dev/collectorsden/internal/ui/themes"
+	bundled "hrubos.dev/collectorsden/internal/ui/bundled"
 	uiFiles "hrubos.dev/collectorsden/internal/ui/uiFiles"
 )
 
@@ -18,6 +19,7 @@ func Run(){
 
 	app := app.NewWithID("hrubos.dev/collectorsden")
 	app.Settings().SetTheme(themes.NewDarkTheme())
+	app.SetIcon(bundled.ResourceAssetsImgIconPng)
 	mainWindow := app.NewWindow("tree")
 
 	fileModel := uiFiles.NewModel()
