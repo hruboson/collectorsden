@@ -4,8 +4,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
-
-	"hrubos.dev/collectorsden/internal/logger"
 )
 
 type FileController struct {
