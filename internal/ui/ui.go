@@ -19,11 +19,11 @@ func Run(){
 	app.Settings().SetTheme(&darkTheme{})
 	mainWindow := app.NewWindow("tree")
 
-	fileModel := uiFiles.NewFileModel()
-	fileView := uiFiles.NewFileView()
-	fileController := uiFiles.NewFileController(fileModel, fileView, mainWindow)
+	fileModel := uiFiles.NewModel()
+	fileView := uiFiles.NewView()
+	fileController := uiFiles.NewController(fileModel, fileView, mainWindow)
 
-	mainWindow.SetContent(fileController.FileView)
+	mainWindow.SetContent(fileController.View)
 	mainWindow.Resize(fyne.NewSize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT))
 	mainWindow.CenterOnScreen()
 	mainWindow.ShowAndRun()

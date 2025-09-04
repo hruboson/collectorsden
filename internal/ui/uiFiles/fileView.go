@@ -9,18 +9,19 @@ import (
 )
 
 // Implement fyne.widget
-var _ fyne.Widget = (*FileView)(nil)
+var _ fyne.Widget = (*View)(nil)
 
-type FileView struct {
+type View struct {
 	widget.BaseWidget
+	container *fyne.Container
 	treeWidget *widget.Tree
 	rootDirEntryWidget *widget.Entry
 	browserBtnWidget *widget.Button
 	statusLabel *widget.Label
 }
 
-func NewFileView() *FileView {
-	fv := &FileView{
+func NewView() *View {
+	fv := &View{
 		treeWidget: widget.NewTree(nil, nil, nil, nil),
 		rootDirEntryWidget: widget.NewEntry(),
 		browserBtnWidget: widget.NewButton("Browse", nil),
@@ -30,11 +31,7 @@ func NewFileView() *FileView {
 	// default values
 	fv.rootDirEntryWidget.SetPlaceHolder("Enter directory path...")
 
-	return fv
-}
-
-func (fv *FileView) CreateRenderer() fyne.WidgetRenderer {
-	c := container.NewBorder(
+	fv.container = container.NewBorder(
 		container.NewBorder(
 			nil,
 			nil,
@@ -47,12 +44,18 @@ func (fv *FileView) CreateRenderer() fyne.WidgetRenderer {
 		nil,
 		fv.treeWidget,
 	)
-	return widget.NewSimpleRenderer(c)
+    fv.ExtendBaseWidget(fv) // Important so Fyne knows it's a widget
+
+	return fv
+}
+
+func (fv *View) CreateRenderer() fyne.WidgetRenderer {
+    return widget.NewSimpleRenderer(fv.container)
 }
 
 // ----- Data setters -----
 
-func (fv *FileView) BindTree(
+func (fv *View) BindTree(
 	childUIDs func(uid string) []string,
 	isBranch func(uid string) bool,
 	getName func(uid string) string,
@@ -86,7 +89,7 @@ func (fv *FileView) BindTree(
 	}
 }
 
-func (fv *FileView) SwitchTreeRoot(root string){
+func (fv *View) SwitchTreeRoot(root string){
 	logger.Log("Switching tree root", logger.CatView)
 
 	fv.treeWidget.Root = root
@@ -95,21 +98,21 @@ func (fv *FileView) SwitchTreeRoot(root string){
 
 // ----- Callback setters
 
-func (fv *FileView) SetBrowseButtonOnTapped(f func()) {
+func (fv *View) SetBrowseButtonOnTapped(f func()) {
 	fv.browserBtnWidget.OnTapped = f	
 }
 
-func (fv *FileView) SetTreeWidgetOnSelected(f func(uid widget.TreeNodeID)) {
+func (fv *View) SetTreeWidgetOnSelected(f func(uid widget.TreeNodeID)) {
 	fv.treeWidget.OnSelected = f
 }
 
 // ----- Text setters -----
 
-func (fv *FileView) RootDirEntryWidgetSetText(text string) {
+func (fv *View) RootDirEntryWidgetSetText(text string) {
 	fv.rootDirEntryWidget.SetText(text)
 }
 
-func (fv *FileView) StatusLabelSetText(text string) {
+func (fv *View) StatusLabelSetText(text string) {
 	fv.statusLabel.SetText(text)
 }
 

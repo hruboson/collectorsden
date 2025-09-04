@@ -5,14 +5,14 @@ import (
 	logger "hrubos.dev/collectorsden/internal/logger"
 )
 
-type FileModel struct {
+type Model struct {
 	root string
 
 	childrenCache map[string][]string // reason: keeps the tree queries inexpensive (drive cost)
 }
 
-func NewFileModel() *FileModel {
-	fm := &FileModel{
+func NewModel() *Model {
+	fm := &Model{
 		root: "./",
         childrenCache: make(map[string][]string),
 	}
@@ -21,7 +21,7 @@ func NewFileModel() *FileModel {
 }
 
 // TreeData returns functions that can be bound to a widget.Tree
-func (fm *FileModel) TreeData() (
+func (fm *Model) TreeData() (
 	childUIDs func(uid string) []string,
 	isBranch func(uid string) bool,
 	getName func(uid string) string,
@@ -51,12 +51,12 @@ func (fm *FileModel) TreeData() (
 }
 
 // ----- Data setters -----
-func (fm *FileModel) SetRoot(root string) {
+func (fm *Model) SetRoot(root string) {
 	logger.Log("Tree root is now " + root, logger.CatModel)
 	fm.root = root
 }
 
 // ----- Data getters -----
-func (fm *FileModel) GetRoot() string {
+func (fm *Model) GetRoot() string {
 	return fm.root
 }
