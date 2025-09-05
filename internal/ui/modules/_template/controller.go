@@ -11,13 +11,13 @@ type Controller struct {
 	app fyne.App
 }
 
-func NewController(fm *Model, fv *View, app fyne.App, window fyne.Window) *Controller {
-	fc := &Controller{
-		Model: fm,
-		View: fv,
+func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Controller {
+	c := &Controller{
+		Model: m,
+		View: v,
 		window: window,
 		app: app,
 	}
 
-	return fc
+	return c
 }

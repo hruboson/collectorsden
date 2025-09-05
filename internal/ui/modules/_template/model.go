@@ -9,19 +9,19 @@ type Model struct {
 }
 
 func NewModel() *Model {
-	fm := &Model{
-		data = 42
+	m := &Model{
+		data: 42
 	}
 
-	return fm
+	return m
 }
 
 // ----- Data setters -----
-func (fm *Model) SetData(data int) {
-	fm.data = data
+func (m *Model) SetData(data int) {
+	m.data = data
 }
 
 // ----- Data getters -----
-func (fm *Model) GetData() int {
-	return fm.data
+func (m *Model) GetData() int {
+	return m.data
 }

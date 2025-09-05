@@ -16,33 +16,33 @@ type View struct {
 }
 
 func NewView() *View {
-	fv := &View{
-		btn: widget.NewButton("Btn", nil)
+	v := &View{
+		btn: widget.NewButton("Btn", nil),
 	}
 
-	fv.container = container.NewBorder(
+	v.container = container.NewBorder(
 		nil,
 		nil,
 		nil,
 		nil,
-		fv.btn,
+		v.btn,
 	)
 
-    fv.ExtendBaseWidget(fv) // Important so Fyne knows it's a widget
+    v.ExtendBaseWidget(v) // Important so Fyne knows it's a widget
 
-	return fv
+	return v
 }
 
-func (fv *View) CreateRenderer() fyne.WidgetRenderer {
-    return widget.NewSimpleRenderer(fv.container)
+func (v *View) CreateRenderer() fyne.WidgetRenderer {
+    return widget.NewSimpleRenderer(v.container)
 }
 
 // ----- Data setters -----
 
 // ----- Callback setters
 
-func (fv *View) SetBrowseButtonOnTapped(f func()) {
-	fv.browserBtnWidget.OnTapped = f	
+func (v *View) SetBrowseButtonOnTapped(f func()) {
+	v.browserBtnWidget.OnTapped = f	
 }
 
 // ----- Text setters -----
