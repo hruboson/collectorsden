@@ -9,6 +9,9 @@
    id="svg1"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="icon.svg"
+   inkscape:export-filename="icon_v3.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -25,9 +28,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      showguides="true"
-     inkscape:zoom="8"
-     inkscape:cx="87.4375"
-     inkscape:cy="84.5625"
+     inkscape:zoom="4"
+     inkscape:cx="42.375"
+     inkscape:cy="109.375"
      inkscape:window-width="2560"
      inkscape:window-height="1351"
      inkscape:window-x="1791"
@@ -324,12 +327,12 @@
      id="layer3"
      inkscape:label="BG">
     <rect
-       style="display:inline;opacity:1;mix-blend-mode:normal;fill:#ffffff;fill-opacity:0;stroke:none;stroke-width:0.714195;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       style="display:inline;opacity:1;mix-blend-mode:normal;fill:#ffffff;fill-opacity:0;stroke:none;stroke-width:0.622136;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
        id="rect64"
-       width="35.921017"
-       height="35.921017"
-       x="8.4189892"
-       y="8.4189892"
+       width="31.29081"
+       height="31.29081"
+       x="10.734093"
+       y="10.734093"
        inkscape:label="BG" />
   </g>
   <g
