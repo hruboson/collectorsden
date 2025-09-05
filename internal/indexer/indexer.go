@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"syscall"
+	_ "syscall"
 
 	logger "hrubos.dev/collectorsden/internal/logger"
 )
@@ -75,6 +75,8 @@ func GetFiles(path string) (list []string) {
 }
 
 func isHidden(path string) bool {
+	// TODO multiplatform syscall
+	/*
     p, err := syscall.UTF16PtrFromString(path)
     if err != nil {
 		msg := fmt.Sprintf("Invalid path string '%s': contains NUL characters", path)
@@ -87,6 +89,8 @@ func isHidden(path string) bool {
 		logger.Log(msg, logger.CatIndexer)
         return false
     }
+
     const FILE_ATTRIBUTE_HIDDEN = 0x2
-    return attrs&FILE_ATTRIBUTE_HIDDEN != 0
+    return attrs&FILE_ATTRIBUTE_HIDDEN != 0*/
+	return false
 }
