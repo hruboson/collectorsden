@@ -37,3 +37,6 @@ go.work.sum
 # Generated docs
 doc/generated.md
 doc/generated.tmp
+
+# Generated web assembly
+wasm/
