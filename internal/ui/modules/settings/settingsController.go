@@ -1,0 +1,36 @@
+package moduleSettings
+
+import (
+	"fyne.io/fyne/v2"
+
+	themes "hrubos.dev/collectorsden/internal/ui/themes"
+)
+
+type Controller struct {
+	*Model
+	*View
+	window fyne.Window
+	app fyne.App
+}
+
+func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Controller {
+	c := &Controller{
+		Model: m,
+		View: v,
+		window: window,
+		app: app,
+	}
+
+	c.View.SetThemeToggleChangeHandler(c.themeSwitcherLogic)
+
+	return c
+}
+
+// TODO with more themes move this to settingsModal.go
+func (c *Controller) themeSwitcherLogic(enabled bool) {
+	if enabled {
+		c.app.Settings().SetTheme(themes.NewDarkTheme())
+	} else {
+		c.app.Settings().SetTheme(themes.NewLightTheme())
+	}
+}

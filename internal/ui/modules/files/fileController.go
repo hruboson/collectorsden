@@ -2,12 +2,11 @@ package moduleFiles
 
 import (
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 
 	logger "hrubos.dev/collectorsden/internal/logger"
-	themes "hrubos.dev/collectorsden/internal/ui/themes"
+	moduleSettings "hrubos.dev/collectorsden/internal/ui/modules/settings"
 )
 
 type Controller struct {
@@ -65,25 +64,13 @@ func (fc *Controller) bindFileTree() {
 }
 
 func (fc *Controller) openSettingsWindow() {
-	//TODO put this into components or create new mvc
     settingsWindow := fyne.CurrentApp().NewWindow("Settings")
 
-	themeToggle := widget.NewCheck("Dark Theme", func(enabled bool) {
-		if enabled {
-			fc.app.Settings().SetTheme(themes.NewDarkTheme())  // your custom dark theme
-		} else {
-			fc.app.Settings().SetTheme(themes.NewLightTheme())
-		}
-	})
+	settingsModel := moduleSettings.NewModel()
+	settingsView := moduleSettings.NewView()
+	settingsController := moduleSettings.NewController(settingsModel, settingsView, fc.app, fc.window)
 
-	themeToggle.SetChecked(true)
-
-   	c := container.NewVBox(
-		widget.NewLabel("Select theme:"),
-		themeToggle,
-	)
-
-	settingsWindow.SetContent(c)
+	settingsWindow.SetContent(settingsController.View)
     settingsWindow.Resize(fyne.NewSize(400, 300))
 	settingsWindow.CenterOnScreen()
 
