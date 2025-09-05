@@ -7,6 +7,11 @@ DOC_FILENAME := generated
 DOC_PATH_TMP = doc/$(DOC_FILENAME).tmp
 DOC_PATH_MD = doc\$(DOC_FILENAME).md
 
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+ICON_PATH = assets/img/icon_v3.png
+ICON_PATH_ABS = $(MAKEFILE_DIR)$(ICON_PATH)
+
 UNAME_S := $(OS)
 
 FIREFOX := firefox
@@ -32,6 +37,9 @@ build_release:
 
 run: build_debug
 	$(BINARY_NAME)
+
+webserver:
+	fyne serve -src cmd/ -icon "$(ICON_PATH_ABS)" --debug
 
 doc:
 	gomarkdoc --output doc/generated.tmp ./...
