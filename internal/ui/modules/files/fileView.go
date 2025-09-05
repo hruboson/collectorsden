@@ -1,4 +1,4 @@
-package uiFiles
+package moduleFiles
 
 import (
 	"fyne.io/fyne/v2"

@@ -8,7 +8,8 @@ import (
 
 	themes "hrubos.dev/collectorsden/internal/ui/themes"
 	bundled "hrubos.dev/collectorsden/internal/ui/bundled"
-	uiFiles "hrubos.dev/collectorsden/internal/ui/uiFiles"
+
+	moduleFiles "hrubos.dev/collectorsden/internal/ui/modules/files"
 )
 
 var INITIAL_WINDOW_WIDTH float32 = 1200
@@ -22,9 +23,9 @@ func Run(){
 	app.SetIcon(bundled.ResourceAssetsImgIconPng)
 	mainWindow := app.NewWindow("tree")
 
-	fileModel := uiFiles.NewModel()
-	fileView := uiFiles.NewView()
-	fileController := uiFiles.NewController(fileModel, fileView, app, mainWindow)
+	fileModel := moduleFiles.NewModel()
+	fileView := moduleFiles.NewView()
+	fileController := moduleFiles.NewController(fileModel, fileView, app, mainWindow)
 
 	mainWindow.SetContent(fileController.View)
 	mainWindow.Resize(fyne.NewSize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT))

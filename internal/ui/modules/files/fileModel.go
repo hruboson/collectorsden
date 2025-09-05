@@ -1,4 +1,4 @@
-package uiFiles
+package moduleFiles
 
 import (
 	indexer "hrubos.dev/collectorsden/internal/indexer"
