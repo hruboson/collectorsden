@@ -22,6 +22,9 @@ func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Control
 	}
 
 	c.View.SetThemeToggleChangeHandler(c.themeSwitcherLogic)
+	c.View.SetExportButtonOnClick(c.Model.ExportDatabase)
+
+	c.View.SetExportEntryPlaceHolder(c.Model.GetDefaultExportPath())
 
 	return c
 }
