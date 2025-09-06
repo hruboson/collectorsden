@@ -4,6 +4,8 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+
+	"hrubos.dev/collectorsden/internal/config"
 	"hrubos.dev/collectorsden/internal/ui/components"
 )
 
@@ -26,7 +28,7 @@ func NewView() *View {
 		exportEntry: widget.NewEntry(),
 	}
 
-	v.themeToggle.SetChecked(true)
+	v.themeToggle.SetChecked(config.DarkThemeOn)
 
 	v.container = container.NewVBox(
 		widget.NewLabel("Select theme:"),

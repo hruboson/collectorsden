@@ -1,5 +1,9 @@
 package config
 
+// ----- Theme -----
+var DarkThemeOn bool = true
+
+// ----- Database -----
 const (
     DBFile     		= "main.db"
 	DBSecondaryFile = "secondary.db" // for imports
