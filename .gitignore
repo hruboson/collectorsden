@@ -8,6 +8,16 @@
 *.so
 *.dylib
 
+# Database binary files
+*.db
+*.DB
+*.Db
+*.dB
+
+# Export file
+export.json
+
+
 # Test binary, built with `go test -c`
 *.test
 
