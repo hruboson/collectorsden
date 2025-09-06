@@ -99,7 +99,7 @@ func (fv *View) SwitchTreeRoot(root string){
 	fv.treeWidget.Refresh()
 }
 
-// ----- Callback setters
+// ----- Callback setters -----
 
 func (fv *View) SetBrowseButtonOnTapped(f func()) {
 	fv.browserBtnWidget.OnTapped = f	
@@ -113,6 +113,10 @@ func (fv *View) SetTreeWidgetOnSelected(f func(uid widget.TreeNodeID)) {
 	fv.treeWidget.OnSelected = f
 }
 
+func (fv *View) SetEntryOnSubmitted(f func(text string)) {
+	fv.rootDirEntryWidget.OnSubmitted = f
+}
+
 // ----- Text setters -----
 
 func (fv *View) RootDirEntryWidgetSetText(text string) {
@@ -122,5 +126,3 @@ func (fv *View) RootDirEntryWidgetSetText(text string) {
 func (fv *View) StatusLabelSetText(text string) {
 	fv.statusLabel.SetText(text)
 }
-
-// ----- Getters -----

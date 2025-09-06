@@ -26,6 +26,7 @@ func NewController(fm *Model, fv *View, app fyne.App, window fyne.Window) *Contr
 
 	fc.View.SetBrowseButtonOnTapped(fc.browseFiles)
 	fc.View.SetSettingsButtonOnTapped(fc.openSettingsWindow)
+	fc.View.SetEntryOnSubmitted(fc.onEntrySubmit)
 	fc.View.SetTreeWidgetOnSelected(func(uid widget.TreeNodeID) {
 		fc.View.StatusLabelSetText(uid)
 	})
@@ -76,4 +77,12 @@ func (fc *Controller) openSettingsWindow() {
 
 	logger.Log("Opening settings window", logger.CatUI)
     settingsWindow.Show()
+}
+
+func (fc *Controller) onEntrySubmit(text string){
+	fc.Model.SetRoot(text)
+	fc.View.RootDirEntryWidgetSetText(text)
+
+	fc.View.SwitchTreeRoot(fc.Model.GetRoot())
+	fc.View.StatusLabelSetText(text)
 }
