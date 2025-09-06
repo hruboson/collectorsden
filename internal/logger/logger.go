@@ -16,6 +16,7 @@ const (
 	CatUI = "UI"
 	CatApp = "APP"
 	CatIndexer = "INDXR"
+	CatDB = "DB"
 	CatController = "CONT"
 	CatModel = "MODL"
 	CatView = "VIEW"
