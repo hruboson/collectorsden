@@ -1,6 +1,8 @@
 package moduleFiles
 
 import (
+	"strconv"
+
 	indexer "hrubos.dev/collectorsden/internal/indexer"
 	logger "hrubos.dev/collectorsden/internal/logger"
 )
@@ -12,30 +14,30 @@ type Model struct {
 }
 
 func NewModel() *Model {
-	fm := &Model{
+	m := &Model{
 		root: "./",
         childrenCache: make(map[string][]string),
 	}
 
-	return fm
+	return m
 }
 
 // TreeData returns functions that can be bound to a widget.Tree
-func (fm *Model) TreeData() (
+func (m *Model) TreeData() (
 	childUIDs func(uid string) []string,
 	isBranch func(uid string) bool,
 	getName func(uid string) string,
 ) {
 	childUIDs = func(uid string) []string {
 		if uid == "" {
-			uid = fm.root
+			uid = m.root
 		}
-		if cached, ok := fm.childrenCache[uid]; ok {
+		if cached, ok := m.childrenCache[uid]; ok {
 			return cached
 		}
 
 		files := indexer.GetFiles(uid)
-		fm.childrenCache[uid] = files
+		m.childrenCache[uid] = files
 		return files
 	}
 
@@ -50,13 +52,17 @@ func (fm *Model) TreeData() (
 	return
 }
 
+func (m *Model) CheckNode(name string, checked bool){
+	logger.Log(name + ": " + strconv.FormatBool(checked), logger.CatModel)
+}
+
 // ----- Data setters -----
-func (fm *Model) SetRoot(root string) {
+func (m *Model) SetRoot(root string) {
 	logger.Log("Tree root is now " + root, logger.CatModel)
-	fm.root = root
+	m.root = root
 }
 
 // ----- Data getters -----
-func (fm *Model) GetRoot() string {
-	return fm.root
+func (m *Model) GetRoot() string {
+	return m.root
 }

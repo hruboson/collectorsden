@@ -16,60 +16,60 @@ type Controller struct {
 	app fyne.App
 }
 
-func NewController(fm *Model, fv *View, app fyne.App, window fyne.Window) *Controller {
-	fc := &Controller{
-		Model: fm,
-		View: fv,
+func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Controller {
+	c := &Controller{
+		Model: m,
+		View: v,
 		window: window,
 		app: app,
 	}
 
-	fc.View.SetBrowseButtonOnTapped(fc.browseFiles)
-	fc.View.SetSettingsButtonOnTapped(fc.openSettingsWindow)
-	fc.View.SetEntryOnSubmitted(fc.onEntrySubmit)
-	fc.View.SetTreeWidgetOnSelected(func(uid widget.TreeNodeID) {
-		fc.View.StatusLabelSetText(uid)
+	c.View.SetBrowseButtonOnTapped(c.browseFiles)
+	c.View.SetSettingsButtonOnTapped(c.openSettingsWindow)
+	c.View.SetEntryOnSubmitted(c.onEntrySubmit)
+	c.View.SetTreeWidgetOnSelected(func(uid widget.TreeNodeID) {
+		c.View.StatusLabelSetText(uid)
 	})
 
 
-	fc.bindFileTree()
+	c.bindFileTree()
 
-	return fc
+	return c
 }
 
-func (fc *Controller) browseFiles(){
+func (c *Controller) browseFiles(){
 	callback := func(uri fyne.ListableURI, err error) {
 		if uri != nil {
-			fc.Model.SetRoot(uri.Path())
-			fc.View.RootDirEntryWidgetSetText(uri.Path())
+			c.Model.SetRoot(uri.Path())
+			c.View.RootDirEntryWidgetSetText(uri.Path())
 
-			fc.View.SwitchTreeRoot(fc.Model.GetRoot())
-            fc.View.StatusLabelSetText(uri.Path())
+			c.View.SwitchTreeRoot(c.Model.GetRoot())
+            c.View.StatusLabelSetText(uri.Path())
 		}
 	}
 
-	size := fc.window.Canvas().Size()
+	size := c.window.Canvas().Size()
 	width := size.Width
 	height := size.Height
 	dialogWidth := width * 0.66
 	dialogHeight := height * 0.66
 
-	folderDialog := dialog.NewFolderOpen(callback, fc.window)
+	folderDialog := dialog.NewFolderOpen(callback, c.window)
 	folderDialog.Resize(fyne.NewSize(dialogWidth, dialogHeight))
 	folderDialog.Show()
 }
 
-func (fc *Controller) bindFileTree() {
-	childUIDs, isBranch, getName := fc.Model.TreeData()
-	fc.View.BindTree(childUIDs, isBranch, getName)
+func (c *Controller) bindFileTree() {
+	childUIDs, isBranch, getName := c.Model.TreeData()
+	c.View.BindTree(childUIDs, isBranch, getName, c.Model.CheckNode)
 }
 
-func (fc *Controller) openSettingsWindow() {
+func (c *Controller) openSettingsWindow() {
     settingsWindow := fyne.CurrentApp().NewWindow("Settings")
 
 	settingsModel := moduleSettings.NewModel()
 	settingsView := moduleSettings.NewView()
-	settingsController := moduleSettings.NewController(settingsModel, settingsView, fc.app, fc.window)
+	settingsController := moduleSettings.NewController(settingsModel, settingsView, c.app, c.window)
 
 	settingsWindow.SetContent(settingsController.View)
     settingsWindow.Resize(fyne.NewSize(400, 300))
@@ -79,10 +79,10 @@ func (fc *Controller) openSettingsWindow() {
     settingsWindow.Show()
 }
 
-func (fc *Controller) onEntrySubmit(text string){
-	fc.Model.SetRoot(text)
-	fc.View.RootDirEntryWidgetSetText(text)
+func (c *Controller) onEntrySubmit(text string){
+	c.Model.SetRoot(text)
+	c.View.RootDirEntryWidgetSetText(text)
 
-	fc.View.SwitchTreeRoot(fc.Model.GetRoot())
-	fc.View.StatusLabelSetText(text)
+	c.View.SwitchTreeRoot(c.Model.GetRoot())
+	c.View.StatusLabelSetText(text)
 }

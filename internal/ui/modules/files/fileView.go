@@ -22,7 +22,7 @@ type View struct {
 }
 
 func NewView() *View {
-	fv := &View{
+	v := &View{
 		treeWidget: widget.NewTree(nil, nil, nil, nil),
 		rootDirEntryWidget: widget.NewEntry(),
 		browserBtnWidget: widget.NewButton("Browse", nil),
@@ -31,98 +31,123 @@ func NewView() *View {
 	}
 
 	// default values
-	fv.rootDirEntryWidget.SetPlaceHolder("Enter directory path...")
+	v.rootDirEntryWidget.SetPlaceHolder("Enter directory path...")
 
-	fv.container = container.NewBorder(
+	v.container = container.NewBorder(
 		container.NewBorder(
 			nil,
 			nil,
 			nil,
-	        container.NewHBox(fv.browserBtnWidget, fv.settingsBtnWidget),
-			fv.rootDirEntryWidget,
+	        container.NewHBox(v.browserBtnWidget, v.settingsBtnWidget),
+			v.rootDirEntryWidget,
 		),
-		fv.statusLabel,
+		v.statusLabel,
 		nil,
 		nil,
-		fv.treeWidget,
+		v.treeWidget,
 	)
 
-    fv.ExtendBaseWidget(fv) // Important so Fyne knows it's a widget
+    v.ExtendBaseWidget(v) // Important so Fyne knows it's a widget
 
-	return fv
+	return v
 }
 
-func (fv *View) CreateRenderer() fyne.WidgetRenderer {
-    return widget.NewSimpleRenderer(fv.container)
+func (v *View) CreateRenderer() fyne.WidgetRenderer {
+    return widget.NewSimpleRenderer(v.container)
 }
 
 // ----- Data setters -----
 
-func (fv *View) BindTree(
+func (v *View) BindTree(
 	childUIDs func(uid string) []string,
 	isBranch func(uid string) bool,
 	getName func(uid string) string,
+	onCheck func(name string, checked bool),
 ) {
 
 	logger.Log("Binding functions to tree", logger.CatView)
 
-	fv.treeWidget.ChildUIDs = func(uid widget.TreeNodeID) []widget.TreeNodeID {
+	v.treeWidget.ChildUIDs = func(uid widget.TreeNodeID) []widget.TreeNodeID {
 		return childUIDs(uid)
 	}
-	fv.treeWidget.IsBranch = func(uid widget.TreeNodeID) bool {
+	v.treeWidget.IsBranch = func(uid widget.TreeNodeID) bool {
 		return isBranch(uid)
 	}
-	fv.treeWidget.CreateNode = func(branch bool) fyne.CanvasObject {
+	v.treeWidget.CreateNode = func(branch bool) fyne.CanvasObject {
+		//TODO refactor this, just add icon to files, the rest will be same for both branch and file
 		if !branch {
-			return container.NewHBox(widget.NewIcon(theme.FileIcon()), widget.NewLabel(""))
+			return container.NewHBox(
+				widget.NewIcon(theme.FileIcon()),
+				widget.NewCheck("", nil),
+				widget.NewLabel(""),
+			)
 		}
-		return container.NewHBox(widget.NewLabel(""))
+		return container.NewHBox(
+			widget.NewLabel(""),
+			widget.NewCheck("", nil),
+		)
 	}
-	fv.treeWidget.UpdateNode = func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
+	v.treeWidget.UpdateNode = func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
+		//TODO refactor this, just add icon to files, the rest will be same for both branch and file
 		hbox := node.(*fyne.Container)
 		if !branch {
+			//! warning: these need to be in the exact order of the .CreateNode container, its quite ugly hack but it works
 			icon := hbox.Objects[0].(*widget.Icon)
-			label := hbox.Objects[1].(*widget.Label)
-			label.SetText(getName(uid))
+			check := hbox.Objects[1].(*widget.Check)
+			label := hbox.Objects[2].(*widget.Label)
+
+			name := getName(uid)
+			label.SetText(name)
 			icon.SetResource(theme.FileIcon())
+
+			check.OnChanged = func(checked bool) {
+				onCheck(name, checked)
+			}
 		} else {
+			//! warning: these need to be in the exact order of the .CreateNode container, its quite ugly hack but it works
 			label := hbox.Objects[0].(*widget.Label)
+			check := hbox.Objects[1].(*widget.Check)
+
+			name := getName(uid)
+			check.OnChanged = func(checked bool) {
+				onCheck(name, checked)
+			}
 			label.SetText(getName(uid))
 		}
 	}
 }
 
-func (fv *View) SwitchTreeRoot(root string){
+func (v *View) SwitchTreeRoot(root string){
 	logger.Log("Switching tree root", logger.CatView)
 
-	fv.treeWidget.Root = root
-	fv.treeWidget.Refresh()
+	v.treeWidget.Root = root
+	v.treeWidget.Refresh()
 }
 
 // ----- Callback setters -----
 
-func (fv *View) SetBrowseButtonOnTapped(f func()) {
-	fv.browserBtnWidget.OnTapped = f	
+func (v *View) SetBrowseButtonOnTapped(f func()) {
+	v.browserBtnWidget.OnTapped = f	
 }
 
-func (fv *View) SetSettingsButtonOnTapped(f func()) {
-	fv.settingsBtnWidget.OnTapped = f
+func (v *View) SetSettingsButtonOnTapped(f func()) {
+	v.settingsBtnWidget.OnTapped = f
 }
 
-func (fv *View) SetTreeWidgetOnSelected(f func(uid widget.TreeNodeID)) {
-	fv.treeWidget.OnSelected = f
+func (v *View) SetTreeWidgetOnSelected(f func(uid widget.TreeNodeID)) {
+	v.treeWidget.OnSelected = f
 }
 
-func (fv *View) SetEntryOnSubmitted(f func(text string)) {
-	fv.rootDirEntryWidget.OnSubmitted = f
+func (v *View) SetEntryOnSubmitted(f func(text string)) {
+	v.rootDirEntryWidget.OnSubmitted = f
 }
 
 // ----- Text setters -----
 
-func (fv *View) RootDirEntryWidgetSetText(text string) {
-	fv.rootDirEntryWidget.SetText(text)
+func (v *View) RootDirEntryWidgetSetText(text string) {
+	v.rootDirEntryWidget.SetText(text)
 }
 
-func (fv *View) StatusLabelSetText(text string) {
-	fv.statusLabel.SetText(text)
+func (v *View) StatusLabelSetText(text string) {
+	v.statusLabel.SetText(text)
 }
