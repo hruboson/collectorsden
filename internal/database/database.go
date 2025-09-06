@@ -1,7 +1,7 @@
 package database
 
 import (
-	"encoding/json" // stdlib JSON
+	"encoding/json"
 	"fmt"
 	"os"
     "path/filepath"
@@ -11,13 +11,6 @@ import (
 	config "hrubos.dev/collectorsden/internal/config"
 	logger "hrubos.dev/collectorsden/internal/logger"
 )
-
-type Category struct {
-	ID int		`storm:"id,increment"`
-	Name string
-	Folder string
-	DrivesMappings []string
-}
 
 func Init() {
 	home, err := os.UserHomeDir()
