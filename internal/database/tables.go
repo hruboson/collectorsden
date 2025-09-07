@@ -3,7 +3,7 @@ package database
 type Category struct {
 	ID int		`storm:"id,unique,increment"`
 	Name string
-	Folder string
+	FullPath string //TODO later will be deleted and all paths for this category will be stored in DrivesMappings
 	DrivesMappings []string
 }
 

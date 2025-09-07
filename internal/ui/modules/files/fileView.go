@@ -66,6 +66,7 @@ func (v *View) BindTree(
 	getName func(uid string) string,
 	onCheck func(name string, checked bool),
 	getNodeFromUID func(uid string) indexer.Node,
+	setIndexedCheck func(uid string) bool,
 ) {
 
 	logger.Log("Binding functions to tree", logger.CatView)
@@ -108,6 +109,9 @@ func (v *View) BindTree(
 			label.SetText(nodeName)
 			icon.SetResource(theme.FileIcon())
 
+			// this fixes onchanged firing during re-rendering of the tree
+			check.OnChanged = nil
+			check.SetChecked(setIndexedCheck(uid))
 			check.OnChanged = func(checked bool) {
 				onCheck(name, checked)
 			}
@@ -119,10 +123,14 @@ func (v *View) BindTree(
 			name := getName(uid)
 			node := getNodeFromUID(name)
 			path := node.GetPath()
+			label.SetText(node.Name())
+
+			// this fixes onchanged firing during re-rendering of the tree
+			check.OnChanged = nil
+			check.SetChecked(setIndexedCheck(uid))
 			check.OnChanged = func(checked bool) {
 				onCheck(path, checked)
 			}
-			label.SetText(node.Name())
 		}
 	}
 }
@@ -152,7 +160,7 @@ func (v *View) SetEntryOnSubmitted(f func(text string)) {
 	v.rootDirEntryWidget.OnSubmitted = f
 }
 
-// ----- Text setters -----
+// ----- Text/Status setters -----
 
 func (v *View) RootDirEntryWidgetSetText(text string) {
 	v.rootDirEntryWidget.SetText(text)

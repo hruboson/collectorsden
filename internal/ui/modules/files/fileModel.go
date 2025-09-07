@@ -10,12 +10,14 @@ type Model struct {
 	root string
 
 	nodeCache map[string]indexer.Node // reason: keeps the tree queries inexpensive (drive cost)
+	storedNodes map[string]indexer.Node // nodes stored in database
 }
 
 func NewModel() *Model {
 	m := &Model{
 		root: "./",
         nodeCache: make(map[string]indexer.Node),
+		storedNodes: make(map[string]indexer.Node),
 	}
 
 	return m
@@ -87,15 +89,31 @@ func (m *Model) CheckNode(uid string, checked bool){
 	node := m.nodeCache[uid]
 	if(checked){
 		database.StoreNode(node)
+		m.storedNodes[node.GetPath()] = node
 	}else{
 		database.RemoveNode(node)
+		delete(m.storedNodes, node.GetPath())
 	}
+}
+
+func (m *Model) SetIndexedCheck(uid string) bool {
+	if m.storedNodes[uid] != nil {
+		return true
+	}
+
+	return false
 }
 
 // ----- Data setters -----
 func (m *Model) SetRoot(root string) {
 	logger.Log("Tree root is now " + root, logger.CatModel)
 	m.root = root
+
+	//TODO only add nodes from the root path
+	dbNodes := database.AllNodes()
+	for _, node := range dbNodes {
+		m.storedNodes[node.GetPath()] = node
+	}
 }
 
 // ----- Data getters -----

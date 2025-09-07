@@ -62,7 +62,7 @@ func (c *Controller) browseFiles(){
 
 func (c *Controller) bindFileTree() {
 	childUIDs, isBranch, getName := c.Model.TreeData()
-	c.View.BindTree(childUIDs, isBranch, getName, c.Model.CheckNode, c.getNodeFromUID)
+	c.View.BindTree(childUIDs, isBranch, getName, c.Model.CheckNode, c.getNodeFromUID, c.setIndexedCheck)
 }
 
 func (c *Controller) openSettingsWindow() {
@@ -90,4 +90,8 @@ func (c *Controller) onEntrySubmit(text string) {
 
 func (c *Controller) getNodeFromUID(uid string) indexer.Node {
 	return c.Model.GetNodeFromUID(uid)
+}
+
+func (c *Controller) setIndexedCheck(uid string) bool {
+	return c.Model.SetIndexedCheck(uid)
 }
