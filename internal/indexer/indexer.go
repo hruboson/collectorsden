@@ -1,10 +1,7 @@
 package indexer
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
-	_ "syscall"
 
 	logger "hrubos.dev/collectorsden/internal/logger"
 )
@@ -38,20 +35,23 @@ func (fs *FileStructure) Print(indent string) {
 * PRIMITIVE FUNCTIONS *
 **********************/
 
-func GetFileName(path string) string {
+func IsDir(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		logger.Log("Error while determining whether " + path + " is folder", logger.CatIndexer)
+		return false
+	}
+	return fi.IsDir()
+}
+
+// DEPRECATED
+
+/*func GetFileName(path string) string {
 	fi, err := os.Stat(path)
 	if err != nil {
 		return ""
 	}
 	return fi.Name()
-}
-
-func IsDir(path string) bool {
-	fi, err := os.Stat(path)
-	if err != nil {
-		return false
-	}
-	return fi.IsDir()
 }
 
 func GetFiles(path string) (list []string) {
@@ -72,7 +72,7 @@ func GetFiles(path string) (list []string) {
 
 	logger.Log("Retrieving files from " + path, logger.CatIndexer)
 	return
-}
+}*/
 
 func isHidden(path string) bool {
 	// TODO multiplatform syscall

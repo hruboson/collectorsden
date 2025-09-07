@@ -12,6 +12,8 @@ import (
 	logger "hrubos.dev/collectorsden/internal/logger"
 )
 
+var db *storm.DB
+
 func Init() {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -20,23 +22,17 @@ func Init() {
 
 	config.ExportPath = filepath.Join(home, config.AppFolder)
 
-	Load()
-}
-
-func Load() {
-	db, err := storm.Open(config.DBFile)
+	db, err = storm.Open(config.DBFile)
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+}
 
-	// Save struct
-	/*user := User{Name: "Alice", Email: "alice@example.com"}
-	_ = db.Save(&user)
-
-	// Load struct
-	var u User
-	_ = db.One("ID", user.ID, &u)*/
+func Close() {
+	if db != nil {
+		db.Close()
+	}
+	logger.Log("Successfully close DB", logger.CatDB)
 }
 
 func Export() error {
@@ -46,12 +42,6 @@ func Export() error {
 	}
 
 	logger.Log("Exporting database to " + absPath + "...", logger.CatDB)
-	
-	db, err := storm.Open(config.DBFile)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
 
 	// Export all tables
 	var categories []Category
@@ -73,7 +63,7 @@ func Export() error {
 
 	// Create folder if it doesn't exist
 	if err := os.MkdirAll(config.ExportPath, 0755); err != nil {
-		panic(err)
+		return err
 	}
 
 	// Save to file
@@ -94,18 +84,11 @@ func Import() error {
 
 	// Decode into struct
 	var importData struct {
-		Categories []Category `json:"users"`
+		Categories []Category `json:"categories"`
 	}
 	if err := json.Unmarshal(data, &importData); err != nil {
 		return err
 	}
-
-	// New db for imported (for now, change later)
-	db, err := storm.Open(config.DBSecondaryFile)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
 
 	// Insert tables into db
 	for _, c := range importData.Categories {

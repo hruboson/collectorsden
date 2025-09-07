@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 
+	indexer "hrubos.dev/collectorsden/internal/indexer"
 	logger "hrubos.dev/collectorsden/internal/logger"
 	moduleSettings "hrubos.dev/collectorsden/internal/ui/modules/settings"
 )
@@ -61,7 +62,7 @@ func (c *Controller) browseFiles(){
 
 func (c *Controller) bindFileTree() {
 	childUIDs, isBranch, getName := c.Model.TreeData()
-	c.View.BindTree(childUIDs, isBranch, getName, c.Model.CheckNode)
+	c.View.BindTree(childUIDs, isBranch, getName, c.Model.CheckNode, c.getNodeFromUID)
 }
 
 func (c *Controller) openSettingsWindow() {
@@ -79,10 +80,14 @@ func (c *Controller) openSettingsWindow() {
     settingsWindow.Show()
 }
 
-func (c *Controller) onEntrySubmit(text string){
+func (c *Controller) onEntrySubmit(text string) {
 	c.Model.SetRoot(text)
 	c.View.RootDirEntryWidgetSetText(text)
 
 	c.View.SwitchTreeRoot(c.Model.GetRoot())
 	c.View.StatusLabelSetText(text)
+}
+
+func (c *Controller) getNodeFromUID(uid string) indexer.Node {
+	return c.Model.GetNodeFromUID(uid)
 }

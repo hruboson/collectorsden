@@ -12,6 +12,7 @@ func main(){
 
 	db.Init()
 	ui.Run()
+	db.Close()
 
 	logger.Log("Closing app", logger.CatApp)
 	logger.Close()

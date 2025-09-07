@@ -31,7 +31,6 @@ func NewView() *View {
 	v.themeToggle.SetChecked(config.DarkThemeOn)
 
 	v.container = container.NewVBox(
-		widget.NewLabel("Select theme:"),
 		v.themeToggle,
 		components.NewThreeFourthOneFourth(
 			v.exportEntry,

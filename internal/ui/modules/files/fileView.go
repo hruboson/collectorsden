@@ -5,6 +5,8 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+
+	"hrubos.dev/collectorsden/internal/indexer"
 	"hrubos.dev/collectorsden/internal/logger"
 )
 
@@ -63,6 +65,7 @@ func (v *View) BindTree(
 	isBranch func(uid string) bool,
 	getName func(uid string) string,
 	onCheck func(name string, checked bool),
+	getNodeFromUID func(uid string) indexer.Node,
 ) {
 
 	logger.Log("Binding functions to tree", logger.CatView)
@@ -88,8 +91,12 @@ func (v *View) BindTree(
 		)
 	}
 	v.treeWidget.UpdateNode = func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
+		hbox, ok := node.(*fyne.Container)
+		if !ok {
+			panic(1) //TODO better error message/code
+		}
+
 		//TODO refactor this, just add icon to files, the rest will be same for both branch and file
-		hbox := node.(*fyne.Container)
 		if !branch {
 			//! warning: these need to be in the exact order of the .CreateNode container, its quite ugly hack but it works
 			icon := hbox.Objects[0].(*widget.Icon)
@@ -97,7 +104,8 @@ func (v *View) BindTree(
 			label := hbox.Objects[2].(*widget.Label)
 
 			name := getName(uid)
-			label.SetText(name)
+			nodeName := getNodeFromUID(name).Name()
+			label.SetText(nodeName)
 			icon.SetResource(theme.FileIcon())
 
 			check.OnChanged = func(checked bool) {
@@ -109,10 +117,12 @@ func (v *View) BindTree(
 			check := hbox.Objects[1].(*widget.Check)
 
 			name := getName(uid)
+			node := getNodeFromUID(name)
+			path := node.GetPath()
 			check.OnChanged = func(checked bool) {
-				onCheck(name, checked)
+				onCheck(path, checked)
 			}
-			label.SetText(getName(uid))
+			label.SetText(node.Name())
 		}
 	}
 }

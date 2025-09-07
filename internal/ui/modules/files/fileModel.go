@@ -1,8 +1,7 @@
 package moduleFiles
 
 import (
-	"strconv"
-
+	"hrubos.dev/collectorsden/internal/database"
 	indexer "hrubos.dev/collectorsden/internal/indexer"
 	logger "hrubos.dev/collectorsden/internal/logger"
 )
@@ -10,13 +9,13 @@ import (
 type Model struct {
 	root string
 
-	childrenCache map[string][]string // reason: keeps the tree queries inexpensive (drive cost)
+	nodeCache map[string]indexer.Node // reason: keeps the tree queries inexpensive (drive cost)
 }
 
 func NewModel() *Model {
 	m := &Model{
 		root: "./",
-        childrenCache: make(map[string][]string),
+        nodeCache: make(map[string]indexer.Node),
 	}
 
 	return m
@@ -32,28 +31,65 @@ func (m *Model) TreeData() (
 		if uid == "" {
 			uid = m.root
 		}
-		if cached, ok := m.childrenCache[uid]; ok {
-			return cached
+
+		struids := []string{}
+
+		node, ok := m.nodeCache[uid]
+		folder, ok := node.(*indexer.Folder)
+		if ok {
+			// iterate over children
+			for _, child := range folder.GetChildren() {
+				struids = append(struids, child.GetPath())
+			}
 		}
 
-		files := indexer.GetFiles(uid)
-		m.childrenCache[uid] = files
-		return files
+		return struids
 	}
 
 	isBranch = func(uid string) bool {
-		return indexer.IsDir(uid)
+		if uid == "" {
+			return false
+		}
+
+		node, ok := m.nodeCache[uid]
+		if ok {
+			//logger.Log("Cache hit for " + uid, logger.CatModel)
+			return node.Type() == indexer.FOLDER
+		}
+
+		if indexer.IsDir(uid){
+			//logger.Log("Cache miss for " + uid, logger.CatModel)
+			
+			// add uid to cache and its children
+			folder := indexer.NewFolder(uid, nil)
+			m.nodeCache[uid] = folder
+			for _, child := range folder.GetChildren() {
+				m.nodeCache[child.GetPath()] = child
+			}
+
+			return true
+		} else {
+			file := indexer.NewFile(uid, nil)
+			m.nodeCache[uid] = file
+
+			return false
+		}
 	}
 
 	getName = func(uid string) string {
-		return indexer.GetFileName(uid)
+		return uid
 	}
 
 	return
 }
 
-func (m *Model) CheckNode(name string, checked bool){
-	logger.Log(name + ": " + strconv.FormatBool(checked), logger.CatModel)
+func (m *Model) CheckNode(uid string, checked bool){
+	node := m.nodeCache[uid]
+	if(checked){
+		database.StoreNode(node)
+	}else{
+		database.RemoveNode(node)
+	}
 }
 
 // ----- Data setters -----
@@ -65,4 +101,8 @@ func (m *Model) SetRoot(root string) {
 // ----- Data getters -----
 func (m *Model) GetRoot() string {
 	return m.root
+}
+
+func (m *Model) GetNodeFromUID(uid string) indexer.Node {
+	return m.nodeCache[uid]
 }
