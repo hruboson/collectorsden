@@ -35,10 +35,10 @@ func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Control
 func (c *Controller) themeSwitcherLogic(enabled bool) {
 	logger.Log("Switching theme", logger.CatUI)
 	if enabled {
-		c.app.Settings().SetTheme(themes.NewDarkTheme())
+		config.AppSettings.SetTheme(themes.NewDarkTheme())
 		config.DarkThemeOn = true
 	} else {
-		c.app.Settings().SetTheme(themes.NewLightTheme())
+		config.AppSettings.SetTheme(themes.NewLightTheme())
 		config.DarkThemeOn = false
 	}
 }

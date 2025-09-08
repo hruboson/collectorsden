@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2/app"
 
 	logger "hrubos.dev/collectorsden/internal/logger"
+	config "hrubos.dev/collectorsden/internal/config"
 
 	themes "hrubos.dev/collectorsden/internal/ui/themes"
 	bundled "hrubos.dev/collectorsden/internal/ui/bundled"
@@ -19,7 +20,8 @@ func Run(){
 	logger.Log("Starting UI", logger.CatUI)
 
 	app := app.NewWithID("hrubos.dev/collectorsden")
-	app.Settings().SetTheme(themes.NewDarkTheme())
+	config.AppSettings = app.Settings()
+	config.AppSettings.SetTheme(themes.NewDarkTheme())
 	app.SetIcon(bundled.ResourceAssetsImgIconPng)
 	mainWindow := app.NewWindow("tree")
 

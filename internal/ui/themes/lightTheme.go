@@ -95,6 +95,7 @@ func (m *lightTheme) Icon(name fyne.ThemeIconName) fyne.Resource {
 	switch name {
 		case theme.IconNameMoveDown: return theme.FolderOpenIcon()
 		case theme.IconNameNavigateNext: return theme.FolderIcon()
+		case "link": return resourceAssetsImgIconsPajamasExternalLinkBlackSvg
 		default: return theme.DefaultTheme().Icon(name)
 	}
 }

@@ -58,25 +58,14 @@ func Log(msg string, category string){
 	}
 }
 
-func Fatal(msg string, err error, category ...string){
+func Fatal(msg string, err error, category string){
 	if err == nil {
 		return
 	}
 
-	// Determine category
-	cat := ""
-	if len(category) > 0 {
-		cat = category[0]
-	}
+	log.Println("[FATAL][" + category + "] " + msg + "\n" + err.Error())
 
-	// Log the error
-	if cat != "" {
-		log.Println("[FATAL][" + cat + "] " + msg + "\n" + err.Error())
-	} else {
-		log.Println("[FATAL] " + msg + "\n" + err.Error())
-	}
-
-	// Flush & close file
+	// Flush & close log file
 	Close()
 
 	// Exit program

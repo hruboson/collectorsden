@@ -8,6 +8,7 @@ import (
 	indexer "hrubos.dev/collectorsden/internal/indexer"
 	logger "hrubos.dev/collectorsden/internal/logger"
 	moduleSettings "hrubos.dev/collectorsden/internal/ui/modules/settings"
+	util "hrubos.dev/collectorsden/internal/util"
 )
 
 type Controller struct {
@@ -62,7 +63,17 @@ func (c *Controller) browseFiles(){
 
 func (c *Controller) bindFileTree() {
 	childUIDs, isBranch, getName := c.Model.TreeData()
-	c.View.BindTree(childUIDs, isBranch, getName, c.Model.CheckNode, c.getNodeFromUID, c.setIndexedCheck)
+	c.View.BindTree(
+		childUIDs,
+		isBranch,
+		getName,
+
+		c.getNodeFromUID,
+
+		c.Model.CheckNode,
+		c.setIndexedCheck,
+		util.OpenPath,
+	)
 }
 
 func (c *Controller) openSettingsWindow() {
