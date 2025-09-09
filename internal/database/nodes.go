@@ -41,6 +41,8 @@ func StoreNode(node indexer.Node) error {
 		return err
 	}
 
+	logger.Log("Successfully stored node " + node.Name(), logger.CatDB)
+
 	return nil
 }
 
@@ -76,6 +78,8 @@ func RemoveNode(node indexer.Node) error {
 		logger.Fatal("Error while removing node", err, logger.CatDB)
 		return err
 	}
+
+	logger.Log("Successfully removed node " + node.Name(), logger.CatDB)
 
 	return nil
 }
