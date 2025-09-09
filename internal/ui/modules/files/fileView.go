@@ -1,6 +1,8 @@
 package moduleFiles
 
 import (
+	"errors"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
@@ -83,74 +85,75 @@ func (v *View) BindTree(
 		return isBranch(uid)
 	}
 	v.treeWidget.CreateNode = func(branch bool) fyne.CanvasObject {
-		//TODO refactor this, just add icon to files, the rest will be same for both branch and file
-		if !branch {
-			return container.NewHBox(
-				widget.NewIcon(theme.FileIcon()),
-				widget.NewCheck("", nil),
-				widget.NewLabel(""),
-				layout.NewSpacer(),
-				components.NewThemedIconButton("link", nil),
-			)
-		}
-		return container.NewHBox(
-			widget.NewLabel(""),
+		elements := []fyne.CanvasObject {
 			widget.NewCheck("", nil),
+			widget.NewLabel(""),
 			layout.NewSpacer(),
 			components.NewThemedIconButton("link", nil),
-		)
+		}
+
+		if !branch {
+			elements = append(
+				[]fyne.CanvasObject{widget.NewIcon(theme.FileIcon())}, 
+				elements...
+			)
+		}
+		
+		return container.NewHBox(elements...)
 	}
 	v.treeWidget.UpdateNode = func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
 		hbox, ok := node.(*fyne.Container)
 		if !ok {
-			panic(1) //TODO better error message/code
+			err := errors.New("Could not convert fyne.CanvasObject to fyne.Container")
+			logger.Fatal("Error while updating node in file tree", err, logger.CatView)
 		}
 
-		//TODO refactor this, just add icon to files, the rest will be same for both branch and file
-		if !branch {
-			//! warning: these need to be in the exact order of the .CreateNode container, its quite ugly hack but it works
-			icon := hbox.Objects[0].(*widget.Icon)
-			check := hbox.Objects[1].(*widget.Check)
-			label := hbox.Objects[2].(*widget.Label)
-			_ = hbox.Objects[3].(*layout.Spacer)
-			defaultOpenButton := hbox.Objects[4].(*widget.Button)
+		type branchWidgets struct {
+			Icon             *widget.Icon   // only for files
+			Check            *widget.Check
+			Label            *widget.Label
+			DefaultOpenButton *widget.Button
+		}
 
-			name := getName(uid)
-			nodeName := getNodeFromUID(name).Name()
-			label.SetText(nodeName)
-			icon.SetResource(theme.FileIcon())
-			defaultOpenButton.OnTapped = func() {
-				defaultOpenFunction(uid)
-			}
-
-			// this fixes onchanged firing during re-rendering of the tree
-			check.OnChanged = nil
-			check.SetChecked(setIndexedCheck(uid))
-			check.OnChanged = func(checked bool) {
-				onCheckFunction(name, checked)
+		var widgets branchWidgets
+		if branch {
+			// branch layout
+			widgets = branchWidgets{
+				Check:             hbox.Objects[0].(*widget.Check),
+				Label:             hbox.Objects[1].(*widget.Label),
+				DefaultOpenButton: hbox.Objects[3].(*widget.Button),
 			}
 		} else {
-			//! warning: these need to be in the exact order of the .CreateNode container, its quite ugly hack but it works
-			label := hbox.Objects[0].(*widget.Label)
-			check := hbox.Objects[1].(*widget.Check)
-			_ = hbox.Objects[2].(*layout.Spacer)
-			defaultOpenButton := hbox.Objects[3].(*widget.Button)
-
-			name := getName(uid)
-			node := getNodeFromUID(name)
-			path := node.GetPath()
-			label.SetText(node.Name())
-
-			defaultOpenButton.OnTapped = func() {
-				defaultOpenFunction(uid)
+			// file layout
+			widgets = branchWidgets{
+				Icon:              hbox.Objects[0].(*widget.Icon),
+				Check:             hbox.Objects[1].(*widget.Check),
+				Label:             hbox.Objects[2].(*widget.Label),
+				DefaultOpenButton: hbox.Objects[4].(*widget.Button),
 			}
+		}
 
-			// this fixes onchanged firing during re-rendering of the tree
-			check.OnChanged = nil
-			check.SetChecked(setIndexedCheck(uid))
-			check.OnChanged = func(checked bool) {
-				onCheckFunction(path, checked)
-			}
+		name := getName(uid)
+		nodeInfo := getNodeFromUID(name)
+		labelText := nodeInfo.Name()
+		checkTarget := name
+		if branch {
+			checkTarget = nodeInfo.GetPath()
+		}
+
+		widgets.Label.SetText(labelText)
+		if widgets.Icon != nil { // icon only for files
+			widgets.Icon.SetResource(theme.FileIcon())
+		}
+
+		widgets.DefaultOpenButton.OnTapped = func() {
+			defaultOpenFunction(uid)
+		}
+
+		widgets.Check.OnChanged = nil // keep this... it fixes onchanged firing during re-rendering of the tree
+		widgets.Check.SetChecked(setIndexedCheck(uid))
+		widgets.Check.OnChanged = func(checked bool) {
+			onCheckFunction(checkTarget, checked)
 		}
 	}
 }
