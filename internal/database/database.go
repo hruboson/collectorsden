@@ -15,13 +15,7 @@ import (
 var db *storm.DB
 
 func Init() {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-
-	config.ExportPath = filepath.Join(home, config.AppFolder)
-
+	var err error
 	db, err = storm.Open(config.DBFile)
 	if err != nil {
 		panic(err)

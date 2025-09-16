@@ -28,5 +28,5 @@ func (m *Model) ExportDatabase() {
 // ----- Data getters -----
 
 func (m *Model) GetDefaultExportPath() string {
-	return config.ExportPath + config.ExportFile
+	return config.ExportPath + "/" + config.ExportFile
 }
