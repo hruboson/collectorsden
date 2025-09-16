@@ -50,3 +50,6 @@ doc/generated.tmp
 
 # Generated web assembly
 wasm/
+
+# Linux binary
+app
