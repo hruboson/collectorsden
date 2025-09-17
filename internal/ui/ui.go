@@ -29,12 +29,7 @@ func Run(){
 	homeModel := moduleHome.NewModel()
 	homeView := moduleHome.NewView()
 	homeController := moduleHome.NewController(homeModel, homeView, app, mainWindow)
-
-	/*fileModel := moduleFiles.NewModel()
-	fileView := moduleFiles.NewView()
-	fileController := moduleFiles.NewController(fileModel, fileView, app, mainWindow)*/
-
-	//mainWindow.SetContent(fileController.View)
+	
 	mainWindow.SetContent(homeController.View)
 	mainWindow.Resize(fyne.NewSize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT))
 	mainWindow.CenterOnScreen()
