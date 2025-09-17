@@ -4,13 +4,14 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 
-	logger "hrubos.dev/collectorsden/internal/logger"
 	config "hrubos.dev/collectorsden/internal/config"
+	logger "hrubos.dev/collectorsden/internal/logger"
 
-	themes "hrubos.dev/collectorsden/internal/ui/themes"
 	bundled "hrubos.dev/collectorsden/internal/ui/bundled"
+	themes "hrubos.dev/collectorsden/internal/ui/themes"
 
-	moduleFiles "hrubos.dev/collectorsden/internal/ui/modules/files"
+	//moduleFiles "hrubos.dev/collectorsden/internal/ui/modules/files"
+	moduleHome "hrubos.dev/collectorsden/internal/ui/modules/home"
 )
 
 var INITIAL_WINDOW_WIDTH float32 = 1200
@@ -25,11 +26,16 @@ func Run(){
 	app.SetIcon(bundled.ResourceAssetsImgIconPng)
 	mainWindow := app.NewWindow("tree")
 
-	fileModel := moduleFiles.NewModel()
-	fileView := moduleFiles.NewView()
-	fileController := moduleFiles.NewController(fileModel, fileView, app, mainWindow)
+	homeModel := moduleHome.NewModel()
+	homeView := moduleHome.NewView()
+	homeController := moduleHome.NewController(homeModel, homeView, app, mainWindow)
 
-	mainWindow.SetContent(fileController.View)
+	/*fileModel := moduleFiles.NewModel()
+	fileView := moduleFiles.NewView()
+	fileController := moduleFiles.NewController(fileModel, fileView, app, mainWindow)*/
+
+	//mainWindow.SetContent(fileController.View)
+	mainWindow.SetContent(homeController.View)
 	mainWindow.Resize(fyne.NewSize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT))
 	mainWindow.CenterOnScreen()
 	mainWindow.ShowAndRun()
