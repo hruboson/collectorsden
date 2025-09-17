@@ -39,18 +39,28 @@ func NewView() *View {
 	// default values
 	v.rootDirEntryWidget.SetPlaceHolder("Enter directory path...")
 
-	v.container = container.NewBorder(
+	mainSplit := container.NewHSplit(
 		container.NewBorder(
+			container.NewBorder(
+				nil,
+				nil,
+				nil,
+				container.NewHBox(v.browserBtnWidget, v.settingsBtnWidget),
+				v.rootDirEntryWidget,
+			),
+			v.statusLabel,
 			nil,
 			nil,
-			nil,
-	        container.NewHBox(v.browserBtnWidget, v.settingsBtnWidget),
-			v.rootDirEntryWidget,
+			v.treeWidget,
 		),
-		v.statusLabel,
-		nil,
-		nil,
-		v.treeWidget,
+		container.NewStack(
+			widget.NewLabel("Test"),
+		),
+	)
+	mainSplit.Offset = 0.5
+
+	v.container = container.NewStack(
+		mainSplit,
 	)
 
     v.ExtendBaseWidget(v) // Important so Fyne knows it's a widget
