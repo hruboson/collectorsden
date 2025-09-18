@@ -1,5 +1,20 @@
 package database
 
+type Folder struct {
+	ID int		`storm:"id,unique,increment"`
+	Name string
+	FullPath string
+	DrivesMappings []string
+	IsContent bool
+}
+
+type File struct {
+	ID int `storm:"id,increment"`
+	Name string
+	ParentCategory int
+	FullPath string `storm:"unique"`
+}
+
 type Category struct {
 	ID int		`storm:"id,unique,increment"`
 	Name string
