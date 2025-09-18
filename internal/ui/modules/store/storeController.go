@@ -8,6 +8,7 @@ import (
 	indexer "hrubos.dev/collectorsden/internal/indexer"
 	logger "hrubos.dev/collectorsden/internal/logger"
 	moduleSettings "hrubos.dev/collectorsden/internal/ui/modules/settings"
+	moduleFront "hrubos.dev/collectorsden/internal/ui/modules/front"
 	util "hrubos.dev/collectorsden/internal/util"
 )
 
@@ -27,6 +28,7 @@ func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Control
 	}
 
 	c.View.SetBrowseButtonOnTapped(c.browseFiles)
+	c.View.SetOpenFrontButtonOnTapped(c.openFront)
 	c.View.SetSettingsButtonOnTapped(c.openSettingsWindow)
 	c.View.SetEntryOnSubmitted(c.onEntrySubmit)
 	c.View.SetTreeWidgetOnSelected(func(uid widget.TreeNodeID) {
@@ -89,6 +91,14 @@ func (c *Controller) openSettingsWindow() {
 
 	logger.Log("Opening settings window", logger.CatUI)
     settingsWindow.Show()
+}
+
+func (c *Controller) openFront(){
+	frontModel := moduleFront.NewModel()
+	frontView := moduleFront.NewView()
+	frontController := moduleFront.NewController(frontModel, frontView, c.app, c.window)
+
+	c.window.SetContent(frontController.View)
 }
 
 func (c *Controller) onEntrySubmit(text string) {

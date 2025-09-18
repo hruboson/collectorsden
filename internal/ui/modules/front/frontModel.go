@@ -10,7 +10,7 @@ type Model struct {
 
 func NewModel() *Model {
 	m := &Model{
-		data: 42
+		data: 42,
 	}
 
 	return m

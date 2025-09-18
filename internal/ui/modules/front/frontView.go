@@ -42,7 +42,7 @@ func (v *View) CreateRenderer() fyne.WidgetRenderer {
 // ----- Callback setters
 
 func (v *View) SetBrowseButtonOnTapped(f func()) {
-	v.browserBtnWidget.OnTapped = f	
+	v.btn.OnTapped = f	
 }
 
 // ----- Text setters -----

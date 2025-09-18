@@ -22,7 +22,8 @@ type View struct {
 	container *fyne.Container
 	treeWidget *widget.Tree
 	rootDirEntryWidget *widget.Entry
-	browserBtnWidget *widget.Button
+	browserBtnWidget *widget.Button // TODO refactor names in this mvc module
+	btnOpenFront *widget.Button
 	settingsBtnWidget *widget.Button
 	statusLabel *widget.Label
 }
@@ -32,6 +33,7 @@ func NewView() *View {
 		treeWidget: widget.NewTree(nil, nil, nil, nil),
 		rootDirEntryWidget: widget.NewEntry(),
 		browserBtnWidget: widget.NewButton("Browse", nil),
+		btnOpenFront: widget.NewButton("Open Front", nil),
 		settingsBtnWidget: widget.NewButton("Settings", nil),
 		statusLabel: widget.NewLabel(""),
 	}
@@ -58,7 +60,7 @@ func NewView() *View {
 			nil,
 			nil,
 			nil,
-			container.NewHBox(v.browserBtnWidget, v.settingsBtnWidget),
+			container.NewHBox(v.browserBtnWidget, v.btnOpenFront, v.settingsBtnWidget),
 			v.rootDirEntryWidget,
 		),
 		nil,
@@ -183,6 +185,10 @@ func (v *View) SwitchTreeRoot(root string){
 
 func (v *View) SetBrowseButtonOnTapped(f func()) {
 	v.browserBtnWidget.OnTapped = f	
+}
+
+func (v *View) SetOpenFrontButtonOnTapped(f func()) {
+	v.btnOpenFront.OnTapped = f	
 }
 
 func (v *View) SetSettingsButtonOnTapped(f func()) {

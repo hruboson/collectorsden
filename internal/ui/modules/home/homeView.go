@@ -18,6 +18,7 @@ type View struct {
 
 	btnNew *widget.Button
 	btnOpen *widget.Button
+	btnLastFront *widget.Button
 
 	appLogo *canvas.Image
 }
@@ -27,6 +28,7 @@ func NewView() *View {
 	v := &View{
 		btnNew: widget.NewButton("New Store", nil),
 		btnOpen: widget.NewButton("Open existing", nil),
+		btnLastFront: widget.NewButton("Open last Front", nil),
 		
 		appLogo: canvas.NewImageFromResource(bundled.ResourceAssetsImgIconPng),
 	}
@@ -41,6 +43,7 @@ func NewView() *View {
 			container.NewHBox(
 				v.btnNew, 
 				v.btnOpen,
+				v.btnLastFront,
 			),
 			nil,
 			nil,
