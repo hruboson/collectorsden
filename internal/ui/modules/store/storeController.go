@@ -1,4 +1,4 @@
-package moduleFiles
+package moduleStore
 
 import (
 	"fyne.io/fyne/v2"

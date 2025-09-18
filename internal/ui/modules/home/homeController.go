@@ -3,7 +3,7 @@ package moduleHome
 import (
 	"fyne.io/fyne/v2"
 
-	"hrubos.dev/collectorsden/internal/ui/modules/files"
+	"hrubos.dev/collectorsden/internal/ui/modules/store"
 )
 
 type Controller struct {
@@ -29,9 +29,9 @@ func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Control
 func (c  *Controller) tbd(){
 	// for now just show file module
 	// TODO also check if this frees the homeView,Model,Controller ... (hopefully it does)
-	fileModel := moduleFiles.NewModel()
-	fileView := moduleFiles.NewView()
-	fileController := moduleFiles.NewController(fileModel, fileView, c.app, c.window)
+	storeModel := moduleStore.NewModel()
+	storeView := moduleStore.NewView()
+	storeController := moduleStore.NewController(storeModel, storeView, c.app, c.window)
 
-	c.window.SetContent(fileController.View)
+	c.window.SetContent(storeController.View)
 }

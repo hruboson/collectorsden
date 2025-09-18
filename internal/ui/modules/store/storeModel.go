@@ -1,4 +1,4 @@
-package moduleFiles
+package moduleStore
 
 import (
 	"hrubos.dev/collectorsden/internal/database"
