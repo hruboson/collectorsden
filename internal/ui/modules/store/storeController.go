@@ -35,7 +35,6 @@ func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Control
 		c.View.StatusLabelSetText(uid)
 	})
 
-
 	c.bindFileTree()
 
 	return c
@@ -98,6 +97,7 @@ func (c *Controller) openFront(){
 	frontView := moduleFront.NewView()
 	frontController := moduleFront.NewController(frontModel, frontView, c.app, c.window)
 
+	logger.Log("Switching Content to Front", logger.CatUI)
 	c.window.SetContent(frontController.View)
 }
 

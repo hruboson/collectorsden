@@ -3,6 +3,7 @@ package moduleHome
 import (
 	"fyne.io/fyne/v2"
 
+	"hrubos.dev/collectorsden/internal/logger"
 	"hrubos.dev/collectorsden/internal/ui/modules/store"
 )
 
@@ -33,5 +34,6 @@ func (c  *Controller) tbd(){
 	storeView := moduleStore.NewView()
 	storeController := moduleStore.NewController(storeModel, storeView, c.app, c.window)
 
+	logger.Log("Switching Content to Store", logger.CatUI)
 	c.window.SetContent(storeController.View)
 }
