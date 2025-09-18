@@ -28,7 +28,7 @@ func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Control
 }
 
 func (c  *Controller) tbd(){
-	// for now just show file module
+	// for now just show store module
 	// TODO also check if this frees the homeView,Model,Controller ... (hopefully it does)
 	storeModel := moduleStore.NewModel()
 	storeView := moduleStore.NewView()
