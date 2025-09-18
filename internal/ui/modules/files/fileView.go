@@ -41,13 +41,7 @@ func NewView() *View {
 
 	mainSplit := container.NewHSplit(
 		container.NewBorder(
-			container.NewBorder(
-				nil,
-				nil,
-				nil,
-				container.NewHBox(v.browserBtnWidget, v.settingsBtnWidget),
-				v.rootDirEntryWidget,
-			),
+			nil,
 			v.statusLabel,
 			nil,
 			nil,
@@ -59,8 +53,18 @@ func NewView() *View {
 	)
 	mainSplit.Offset = 0.5
 
-	v.container = container.NewStack(
-		mainSplit,
+	v.container = container.NewBorder(
+		container.NewBorder(
+			nil,
+			nil,
+			nil,
+			container.NewHBox(v.browserBtnWidget, v.settingsBtnWidget),
+			v.rootDirEntryWidget,
+		),
+		nil,
+		nil,
+		nil,
+		container.NewStack(mainSplit),
 	)
 
     v.ExtendBaseWidget(v) // Important so Fyne knows it's a widget
