@@ -28,7 +28,7 @@ ifeq ($(UNAME_S),Windows_NT)
 	DOC_PATH_MD = doc\$(DOC_FILENAME).md
 	FIREFOX = cmd /C start firefox
 	EXE_STRING = .exe
-	BINARY_NAME = $(BINARY_NAME)$(EXE_STRING)
+	BINARY_NAME := $(BINARY_NAME)$(EXE_STRING)
 	RUN_BINARY_CMD = $(BINARY_NAME)
 endif
 
