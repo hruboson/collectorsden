@@ -36,7 +36,7 @@ all: run
 
 # with logs
 build_debug:
-	go build -ldflags="-X $(PROJECT_NAME)/internal/logger.debugBuildValue=true" -o $(BINARY_NAME) ./cmd
+	go build -ldflags="-X $(PROJECT_NAME)/internal/config.DebugBuildStr=true" -o $(BINARY_NAME) ./cmd
 
 # without logs
 build_release:
@@ -44,6 +44,9 @@ build_release:
 
 run: build_debug
 	$(RUN_BINARY_CMD)
+
+run_pprof:
+	go tool pprof http://localhost:6420/debug/pprof/heap
 
 webserver:
 	fyne serve -src cmd/ -icon "$(ICON_PATH_ABS)" --debug
@@ -61,3 +64,4 @@ clean:
 
 .PHONY: doc
 .PHONY: clean
+.PHONY: run_pprof

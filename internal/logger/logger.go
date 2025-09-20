@@ -4,11 +4,10 @@ import (
 	"io"
 	"log"
 	"os"
-	"strconv"
+
+	"hrubos.dev/collectorsden/internal/config"
 )
 
-var debugBuildValue string = "false" // should be changed when running go build... see Makefile
-var debugEnabled bool
 var file *os.File
 
 // Log message categories
@@ -24,8 +23,6 @@ const (
 )
 
 func Init(logFilePath string) error {
-	debugEnabled, _ = strconv.ParseBool(debugBuildValue)
-
 	// Open or create log file
 	var err error
 	file, err = os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
@@ -47,7 +44,7 @@ func Close() {
 }
 
 func Log(msg string, category string){
-	if !debugEnabled {
+	if !config.DebugBuild {
 		return
 	}
 
