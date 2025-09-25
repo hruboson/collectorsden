@@ -104,3 +104,10 @@ func AllNodes() []indexer.Node {
 
 	return nodes
 }
+
+func AllCategories() []Category {
+	categories := make([]Category, 0)
+	err := db.All(&categories)
+	if err != nil { panic(err) } //TODO
+	return categories
+}

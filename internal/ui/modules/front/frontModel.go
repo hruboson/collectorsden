@@ -1,27 +1,29 @@
 package moduleTemplate
 
 import (
-
+	"hrubos.dev/collectorsden/internal/database"
 )
 
 type Model struct {
-	data int
+	categories []database.Category
 }
 
 func NewModel() *Model {
 	m := &Model{
-		data: 42,
+		categories: make([]database.Category, 0),
 	}
+
+	m.categories = database.AllCategories()
 
 	return m
 }
 
 // ----- Data setters -----
-func (m *Model) SetData(data int) {
-	m.data = data
+func (m *Model) SetCategories(categories []database.Category) {
+	m.categories = categories
 }
 
 // ----- Data getters -----
-func (m *Model) GetData() int {
-	return m.data
+func (m *Model) GetCategories() []database.Category {
+	return m.categories
 }

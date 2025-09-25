@@ -2,6 +2,7 @@ package moduleTemplate
 
 import (
 	"fyne.io/fyne/v2"
+	"hrubos.dev/collectorsden/internal/database"
 )
 
 type Controller struct {
@@ -19,5 +20,21 @@ func NewController(m *Model, v *View, app fyne.App, window fyne.Window) *Control
 		app: app,
 	}
 
+	c.View.BindList(
+		c.getSingleCategoryFromSlice,
+		c.getLengthOfSlice,
+	)
+
 	return c
+}
+
+//TODO completely rewrite this mess later
+func (c *Controller) getSingleCategoryFromSlice(index int) database.Category {
+	categories := c.Model.GetCategories()
+	return categories[index]
+}
+
+func (c *Controller) getLengthOfSlice() int {
+	categories := c.Model.GetCategories()
+	return len(categories)
 }
